@@ -17,7 +17,9 @@
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "husky": "^5.1.1"
+    "husky": "^5.1.1",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1"
   },
   "husky": {
     "hooks": {
@@ -25,6 +27,6 @@
     }
   },
   "lint-staged": {
-    "*.{js}": "eslint --cache --fix"
+    "*.{js}": [ "npx prettier --write", "eslint --cache --fix" ]
   }
 }
