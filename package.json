@@ -1,0 +1,19 @@
+{
+  "name": "dependency-analyzer",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "matias pompilio",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "lint": "eslint --ext .js ./src"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
+    "csv-parser": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0"
+  }
+}
