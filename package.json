@@ -5,8 +5,9 @@
   "author": "matias pompilio",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/app.js",
-    "lint": "eslint --ext .js ."
+    "start": "node app.js",
+    "lint": "eslint --ext .js .",
+    "lint:fix": "eslint --ext .js --fix ."
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -27,9 +28,9 @@
     }
   },
   "lint-staged": {
-    "*.{js}": [
-      "npx prettier --write",
-      "eslint --cache --fix --ext .js"
+    "*.js": [
+      "prettier --write",
+      "eslint --ext .js . --fix ."
     ]
   }
 }
