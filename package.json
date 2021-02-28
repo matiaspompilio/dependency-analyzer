@@ -30,7 +30,7 @@
   "lint-staged": {
     "*.js": [
       "prettier --write",
-      "eslint --ext .js . --fix ."
+      "eslint --fix ."
     ]
   }
 }
