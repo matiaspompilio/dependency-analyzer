@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 
 const parseSourceUrl = (source = '') => {
-  const regex = /\w*\.js/i;
+  const regex = /[\w.]*\.js/i;
   let result = '';
   const sourceParsed = regex.exec(source);
   if (sourceParsed) {
