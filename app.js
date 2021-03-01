@@ -3,14 +3,15 @@ const fs = require('fs');
 const { getHtmlContent } = require('./helpers/htmlParser');
 const csvReader = require('./helpers/csvReader');
 const isValidUrl = require('./helpers/validUrl');
+const untildify = require('untildify');
 
 const fetchUrl = async (url) => {
   try {
     const { data } = await axios.get(url);
     return data;
   } catch (err) {
-    const { response: { data } } = err;
-    return data;
+    console.error(`This site can’t be reached: ${url}`);
+    return;
   }
 };
 
@@ -20,7 +21,7 @@ const readFile = (path) => {
     return data;
   } catch (err) {
     console.error(`The file couldn't be opened: ${path}`);
-    return err;
+    return;
   }
 };
 
@@ -29,8 +30,12 @@ async function parseSiteHtml({ title, url }) {
   let html;
   if (isValidUrl(url)) {
     html = await fetchUrl(url);
-  } else if (fs.existsSync(url)) {
-    html = readFile(url);
+  } else {
+    /* Convert a tilde path to an absolute path */
+    const parsedPath = untildify(url);
+    if(fs.existsSync(parsedPath)){
+      html = readFile(parsedPath);
+    }
   }
   if (html) result = getHtmlContent(title, html);
   return result;
