@@ -1,26 +1,19 @@
 const cheerio = require('cheerio');
 
 const parseSourceUrl = (source = '') => {
-  const regex = /[\w.]*\.js/i;
-  let result = '';
-  const sourceParsed = regex.exec(source);
-  if (sourceParsed) {
-    [result] = sourceParsed;
-  }
-  return result;
+  const sourceSplited = source.split('/');
+  return sourceSplited.slice(-1).pop();
 };
 
 /**
  * Given a html string gets parsed content
- * @param  {String} html The html data
+ * @param  {String} title Website title
+ * @param  {String} html Html data
  * @return {Object}      Object containing the html content
  */
-const getHtmlContent = (html) => {
+const getHtmlContent = (title, html) => {
   /* Load html string in cheerio dom */
   const $ = cheerio.load(html);
-
-  /* Getting page title from the html loaded */
-  const title = $('title').text();
 
   /* Getting script resources */
   const scripts = [];
@@ -39,7 +32,6 @@ const getHtmlContent = (html) => {
     scripts,
     length,
   };
-  console.log(content);
   return content;
 };
 
