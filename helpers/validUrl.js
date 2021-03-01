@@ -2,9 +2,8 @@ const { URL } = require('url');
 
 const isValidUrl = (string) => {
   try {
-    /* eslint-disable no-new */
-    new URL(string);
-    return true;
+    const url = new URL(string);
+    return !!url;
   } catch (err) {
     return false;
   }
