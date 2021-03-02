@@ -1,8 +1,7 @@
-const { readCSV } = require('../helpers/csv');
 const path = require('path');
+const { readCSV } = require('../helpers/csv');
 
 describe('Csv parser tests', () => {
-
   test('Return webpage title from csv', async () => {
     const csvPath = path.resolve(__dirname, 'test.csv');
     const csv = await readCSV(csvPath, ['title', 'url']);
