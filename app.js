@@ -1,110 +1,99 @@
-const axios = require('axios');
-const fs = require('fs');
-const untildify = require('untildify');
+#!/usr/bin/env node
+
 const { program } = require('commander');
-const { getHtmlContent } = require('./helpers/htmlParser');
-const csvReader = require('./helpers/csvReader');
-const isValidUrl = require('./helpers/validUrl');
+const { readCSV } = require('./helpers/csv');
+const { parseSiteHtml } = require('./helpers/html');
+const { version } = require('./package.json');
 
 program
-  .version('0.0.1')
+  .version(version)
   .option('-l, --length', 'Returns each website name with its length in bytes')
-  .option('-d, --dependencies', 'Returns each js with the website where it belongs')
-  .option('-r, --resources', 'Returns how often resources appear on the websites')
-  .option('-f, --file <path>', 'Csv file where the website data is read');
+  .option(
+    '-d, --dependencies',
+    'Returns each js with the website where it belongs',
+  )
+  .option(
+    '-r, --resources',
+    'Returns how often resources appear on the websites',
+  )
+  .option('-f, --file <path>', 'Csv file where the website data is read')
+  .parse(process.argv);
 
-program.parse(process.argv);
+/**
+ * Entity that contains html content
+ *
+ * @typedef {Object} HtmlContent
+ * @property {string} title - site title
+ * @property {string[]} scripts - site scripts
+ * @property {number} length - size of html buffer interpreted as utf-8 file
+ */
 
-const fetchUrl = async (url) => {
-  let data;
-  try {
-    const response = await axios.get(url);
-    data = response.data;
-    return data;
-  } catch (err) {
-    console.error(`This site can’t be reached: ${url} \n`);
-  }
-  return data;
-};
-
-const readFile = (path) => {
-  let data;
-  try {
-    data = fs.readFileSync(path, 'utf8');
-  } catch (err) {
-    console.error(`This file can't be opened: ${path} \n`);
-  }
-  return data;
-};
-
-async function parseSiteHtml({ title, url }) {
-  let result;
-  let html;
-  if (isValidUrl(url)) {
-    html = await fetchUrl(url);
-  } else {
-    /* Convert a tilde path to an absolute path */
-    const parsedPath = untildify(url);
-    if (fs.existsSync(parsedPath)) {
-      html = readFile(parsedPath);
-    }
-  }
-  if (html) result = getHtmlContent(title, html);
-  return result;
-}
-
+/**
+ * Prints title and size for each site
+ * @param {HtmlContent[]} sites array that contains data for each site
+ */
 const websitesLength = (sites) => {
-  console.log('Websites length are:');
+  console.log('Websites length is:');
   sites.forEach((site) => {
-    if (site) {
-      console.log(`${site.title}, ${site.length}`);
-    }
+    console.log(`${site.title}, ${site.length}`);
   });
+  console.log('\n');
 };
 
+/**
+ * Prints title and scripts for each site
+ * @param {HtmlContent[]} sites array that contains data for each site
+ */
 const websitesDependencies = (sites) => {
   console.log('Websites dependencies are:');
   sites.forEach((site) => {
-    if (site) {
-      site.scripts.forEach((script) => {
-        console.log(`${site.title}, ${script}`);
-      });
-    }
+    site.scripts.forEach((script) => {
+      console.log(`${site.title}, ${script}`);
+    });
   });
+  console.log('\n');
 };
 
+/**
+ * Prints resources frequency
+ * @param {HtmlContent[]} sites array that contains data for each site
+ */
 const websitesFrequency = (sites) => {
   const result = {};
   console.log('Resources frequency is:');
   sites.forEach((site) => {
-    if (site) {
-      site.scripts.forEach((script) => {
-        if (script in result) {
-          result[script] += 1;
-        } else {
-          result[script] = 1;
-        }
-      });
-    }
+    site.scripts.forEach((script) => {
+      if (script in result) {
+        result[script] += 1;
+      } else {
+        result[script] = 1;
+      }
+    });
   });
-  Object.keys(result).forEach((key) => {
-    console.log(`${key}, ${result[key]}`);
+  Object.entries(result).forEach(([key, value]) => {
+    console.log(`${key}, ${value}`);
   });
+  console.log('\n');
 };
 
-async function app() {
+const app = async () => {
   const options = program.opts();
-  if (!options.length && !options.dependencies && !options.resources) {
+
+  if (
+    (!options.length && !options.dependencies && !options.resources)
+    || !options.file
+  ) {
     console.log("Try '--help' command for more information.");
     return;
   }
-  const { file } = options;
-  const csvSites = await csvReader(file, ['title', 'url']);
-  const results = await Promise.all(csvSites.map(parseSiteHtml));
+
+  const sites = await readCSV(options.file, ['title', 'url']);
+  const parsedSites = await Promise.all(sites.map(parseSiteHtml));
+  const results = parsedSites.filter(Boolean);
 
   if (options.length) websitesLength(results);
   if (options.dependencies) websitesDependencies(results);
   if (options.resources) websitesFrequency(results);
-}
+};
 
 app();
