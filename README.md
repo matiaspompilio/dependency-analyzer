@@ -1,4 +1,5 @@
 # Dependency Analyzer
+[![CI](https://github.com/matiaspompilio/dependency-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/matiaspompilio/dependency-analyzer/actions/workflows/ci.yml)
 
 Dependency Analyzer is a CLI app designed for analyze and parse information from different websites. The goal is to get information about urls previously written in a csv file.
 
