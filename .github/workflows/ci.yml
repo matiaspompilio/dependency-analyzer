@@ -19,3 +19,6 @@ jobs:
 
       - name: Run linter
         run: yarn lint
+      
+      - name: Execute tests
+        run: yarn test
