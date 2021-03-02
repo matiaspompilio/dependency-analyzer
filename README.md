@@ -31,12 +31,12 @@ The headers `title` and `url` are required.
 
 ### Options
 
-- -V, --version output the version number
-- -f, --file <path> Csv file where the website data is read
-- -l, --length Returns each website name with its length in bytes
-- -d, --dependencies Returns each js with the website where it belongs
-- -r, --resources Returns how often resources appear on the websites
-- -h, --help display help for command
+- `-V`, `--version` output the version number
+- `-f`, `--file <path>` Csv file where the website data is read
+- `-l`, `--length` Returns each website name with its length in bytes
+- `-d`, `--dependencies` Returns each js with the website where it belongs
+- `-r`, `--resources` Returns how often resources appear on the websites
+- `-h`, `--help` display help for command
 
 ### Tests
 
