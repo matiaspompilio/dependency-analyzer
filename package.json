@@ -7,7 +7,8 @@
   "scripts": {
     "analyze": "node app.js",
     "lint": "eslint . --ext .js",
-    "format": "prettier --write \"**/*.{js,json,md}\" && eslint --fix . --ext .js"
+    "format": "prettier --write \"**/*.{js,json,md}\" && eslint --fix . --ext .js",
+    "test": "jest"
   },
   "bin": {
     "deps-analyze": "./app.js",
@@ -28,6 +29,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^5.1.1",
+    "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "prettier-eslint": "^12.0.0",

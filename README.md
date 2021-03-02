@@ -22,3 +22,14 @@ $ yarn analyze --file <csv_file_path> [options]
 - -d, --dependencies Returns each js with the website where it belongs
 - -r, --resources Returns how often resources appear on the websites
 - -h, --help display help for command
+
+### Tests
+
+Running unit test using Jest
+
+Execute `yarn test` to run project tests
+
+### TODO
+
+- Improve the test coverage.
+- Publish package to npm registry to make it easier to use
